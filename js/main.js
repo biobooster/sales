@@ -1,110 +1,271 @@
-/* ===================================
---------------------------------------
-  X Gym - Fitness HTML Template
-  Version: 1.0
---------------------------------------
-======================================*/
-
-
-'use strict';
-
-$(window).on('load', function() {
-	/*------------------
-		Preloder
-	--------------------*/
-	$(".loader").fadeOut();
-	$("#preloder").delay(400).fadeOut("slow");
-
-});
+ AOS.init({
+ 	duration: 800,
+ 	easing: 'slide'
+ });
 
 (function($) {
-	/*------------------
-		Navigation
-	--------------------*/
-	$(".main-menu").slicknav({
-        appendTo: '.header-section',
-        allowParentLinks: true
-    });
 
-	/*------------------
-		Background Set
-	--------------------*/
-	$('.set-bg').each(function() {
-		var bg = $(this).data('setbg');
-		$(this).css('background-image', 'url(' + bg + ')');
-	});
+	"use strict";
 
-	/*------------------
-		BMI calculator
-	--------------------*/
-	function  computeBMI () {
-		// user inputs
-		var height = Number(document.getElementById("bmi-hight").value);
-		var weight = Number(document.getElementById("bmi-weight").value);
-		var result = weight / (height * height);
+	$(window).stellar({
+    responsive: true,
+    parallaxBackgrounds: true,
+    parallaxElements: true,
+    horizontalScrolling: false,
+    hideDistantElements: false,
+    scrollProperty: 'scroll',
+    horizontalOffset: 0,
+	  verticalOffset: 0
+  });
 
-		//Display result of calculation
-		var output = Math.round(result * 100) / 100;
-		if (output < 18.5) {
-			document.getElementById("bmi-result").value = output + " (Underweight)";
-		} else if (output >= 18.5 && output <= 25) {
-			document.getElementById("bmi-result").value = output + " (Normal)";
-		} else if (output >= 25 && output <= 30) {
-			document.getElementById("bmi-result").value = output + " (Obese)";
-		}else if (output > 30) {
-			document.getElementById("bmi-result").value = output + " (Overweight)";
-		} else {
-			document.getElementById("bmi-result").value = output; 
-		}
-	}
-
-	$('#bmi-submit').on('click', function(){
-		computeBMI();
-	});
+  // Scrollax
+  $.Scrollax();
 
 
-	/*------------------
-		Accordions
-	--------------------*/
-	$('.panel-link').on('click', function (e) {
-		$('.panel-link').removeClass('active');
+	var fullHeight = function() {
+
+		$('.js-fullheight').css('height', $(window).height());
+		$(window).resize(function(){
+			$('.js-fullheight').css('height', $(window).height());
+		});
+
+	};
+	fullHeight();
+
+	// loader
+	var loader = function() {
+		setTimeout(function() { 
+			if($('#ftco-loader').length > 0) {
+				$('#ftco-loader').removeClass('show');
+			}
+		}, 1);
+	};
+	loader();
+
+	// Scrollax
+   $.Scrollax();
+
+	var carousel = function() {
+		$('.carousel-testimony').owlCarousel({
+			autoplay: true,
+			loop: true,
+			items:1,
+			margin: 0,
+			animateOut: 'fadeOut',
+	    animateIn: 'fadeIn',
+			stagePadding: 0,
+			nav: false,
+			navText: ['<span class="ion-ios-arrow-back">', '<span class="ion-ios-arrow-forward">'],
+			responsive:{
+				0:{
+					items: 1
+				},
+				600:{
+					items: 1
+				},
+				1000:{
+					items: 1
+				}
+			}
+		});
+
+	};
+	carousel();
+
+	$('nav .dropdown').hover(function(){
 		var $this = $(this);
-		if (!$this.hasClass('active')) {
-			$this.addClass('active');
-		}
-		e.preventDefault();
+		// 	 timer;
+		// clearTimeout(timer);
+		$this.addClass('show');
+		$this.find('> a').attr('aria-expanded', true);
+		// $this.find('.dropdown-menu').addClass('animated-fast fadeInUp show');
+		$this.find('.dropdown-menu').addClass('show');
+	}, function(){
+		var $this = $(this);
+			// timer;
+		// timer = setTimeout(function(){
+			$this.removeClass('show');
+			$this.find('> a').attr('aria-expanded', false);
+			// $this.find('.dropdown-menu').removeClass('animated-fast fadeInUp show');
+			$this.find('.dropdown-menu').removeClass('show');
+		// }, 100);
 	});
 
 
-	/*------------------
-		Circle progress
-	--------------------*/
-	$('.circle-progress').each(function() {
-		var cpvalue = $(this).data("cpvalue");
-		var cpcolor = $(this).data("cpcolor");
-		var cptitle = $(this).data("cptitle");
-		var cpid 	= $(this).data("cpid");
-
-		$(this).append('<div class="'+ cpid +'"></div><div class="progress-info"><h2>'+ cpvalue +'%</h2><p>'+ cptitle +'</p></div>');
-
-		if (cpvalue < 100) {
-
-			$('.' + cpid).circleProgress({
-				value: '0.' + cpvalue,
-				size: 211,
-				thickness: 5,
-				fill: cpcolor,
-				emptyFill: "rgba(0, 0, 0, 0)"
-			});
-		} else {
-			$('.' + cpid).circleProgress({
-				value: 1,
-				size: 211,
-				thickness: 5,
-				fill: cpcolor,
-				emptyFill: "rgba(0, 0, 0, 0)"
-			});
-		}
+	$('#dropdown04').on('show.bs.dropdown', function () {
+	  console.log('show');
 	});
+
+	// scroll
+	var scrollWindow = function() {
+		$(window).scroll(function(){
+			var $w = $(this),
+					st = $w.scrollTop(),
+					navbar = $('.ftco_navbar'),
+					sd = $('.js-scroll-wrap');
+
+			if (st > 150) {
+				if ( !navbar.hasClass('scrolled') ) {
+					navbar.addClass('scrolled');	
+				}
+			} 
+			if (st < 150) {
+				if ( navbar.hasClass('scrolled') ) {
+					navbar.removeClass('scrolled sleep');
+				}
+			} 
+			if ( st > 350 ) {
+				if ( !navbar.hasClass('awake') ) {
+					navbar.addClass('awake');	
+				}
+				
+				if(sd.length > 0) {
+					sd.addClass('sleep');
+				}
+			}
+			if ( st < 350 ) {
+				if ( navbar.hasClass('awake') ) {
+					navbar.removeClass('awake');
+					navbar.addClass('sleep');
+				}
+				if(sd.length > 0) {
+					sd.removeClass('sleep');
+				}
+			}
+		});
+	};
+	scrollWindow();
+
+	
+	var counter = function() {
+		
+		$('#section-counter').waypoint( function( direction ) {
+
+			if( direction === 'down' && !$(this.element).hasClass('ftco-animated') ) {
+
+				var comma_separator_number_step = $.animateNumber.numberStepFactories.separator(',')
+				$('.number').each(function(){
+					var $this = $(this),
+						num = $this.data('number');
+						console.log(num);
+					$this.animateNumber(
+					  {
+					    number: num,
+					    numberStep: comma_separator_number_step
+					  }, 7000
+					);
+				});
+				
+			}
+
+		} , { offset: '95%' } );
+
+	}
+	counter();
+
+	var contentWayPoint = function() {
+		var i = 0;
+		$('.ftco-animate').waypoint( function( direction ) {
+
+			if( direction === 'down' && !$(this.element).hasClass('ftco-animated') ) {
+				
+				i++;
+
+				$(this.element).addClass('item-animate');
+				setTimeout(function(){
+
+					$('body .ftco-animate.item-animate').each(function(k){
+						var el = $(this);
+						setTimeout( function () {
+							var effect = el.data('animate-effect');
+							if ( effect === 'fadeIn') {
+								el.addClass('fadeIn ftco-animated');
+							} else if ( effect === 'fadeInLeft') {
+								el.addClass('fadeInLeft ftco-animated');
+							} else if ( effect === 'fadeInRight') {
+								el.addClass('fadeInRight ftco-animated');
+							} else {
+								el.addClass('fadeInUp ftco-animated');
+							}
+							el.removeClass('item-animate');
+						},  k * 50, 'easeInOutExpo' );
+					});
+					
+				}, 100);
+				
+			}
+
+		} , { offset: '95%' } );
+	};
+	contentWayPoint();
+
+
+	// navigation
+	var OnePageNav = function() {
+		$(".smoothscroll[href^='#'], #ftco-nav ul li a[href^='#']").on('click', function(e) {
+		 	e.preventDefault();
+
+		 	var hash = this.hash,
+		 			navToggler = $('.navbar-toggler');
+		 	$('html, body').animate({
+		    scrollTop: $(hash).offset().top
+		  }, 700, 'easeInOutExpo', function(){
+		    window.location.hash = hash;
+		  });
+
+
+		  if ( navToggler.is(':visible') ) {
+		  	navToggler.click();
+		  }
+		});
+		$('body').on('activate.bs.scrollspy', function () {
+		  console.log('nice');
+		})
+	};
+	OnePageNav();
+
+
+	// magnific popup
+	$('.image-popup').magnificPopup({
+    type: 'image',
+    closeOnContentClick: true,
+    closeBtnInside: true,
+    fixedContentPos: true,
+    mainClass: 'mfp-no-margins mfp-with-zoom', // class to remove default margin from left and right side
+     gallery: {
+      enabled: true,
+      navigateByImgClick: true,
+      preload: [0,1] // Will preload 0 - before current, and 1 after the current image
+    },
+    image: {
+      verticalFit: true
+    },
+    zoom: {
+      enabled: true,
+      duration: 300 // don't foget to change the duration also in CSS
+    }
+  });
+
+  $('.popup-youtube, .popup-vimeo, .popup-gmaps').magnificPopup({
+    disableOn: 700,
+    type: 'iframe',
+    mainClass: 'mfp-fade',
+    removalDelay: 160,
+    preloader: false,
+
+    fixedContentPos: false
+  });
+
+
+  $('.appointment_date').datepicker({
+	  'format': 'm/d/yyyy',
+	  'autoclose': true
+	});
+
+	$('.appointment_time').timepicker();
+
+
+
 
 })(jQuery);
+
